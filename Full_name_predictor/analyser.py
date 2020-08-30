@@ -33,6 +33,7 @@ if __name__ == "__main__":
     input_names,full_names,female_list,male_list,surnames=parseInput()
     female_list=female_list.tolist()
     male_list=male_list.tolist()
+    prefix=['MAJOR','COLONEL','REVEREND','DOCTOR','PROFESSOR']
     # female_list = [[j.replace(',', '') for j in i.split(' ')] for i in female_list]
     # male_list = [[j.replace(',', '') for j in i.split(' ')] for i in male_list]
     input_names= [[j.replace(',', '') for j in i.split(' AND ')] for i in input_names]
@@ -103,9 +104,9 @@ if __name__ == "__main__":
                         first_name.append(second_name[-2])
             first_name.append(second_name[-1])
             new_names.append(first_name)
-            # if((new_names[i]==full_names[i])==False):
-            #     print("1 false")
-            #     print(new_names[i]+full_names[i])
+            if((new_names[i]==full_names[i])==False):
+                print("1  false")
+                print(new_names[i]+full_names[i])
             # else:
             #     print('true')
             #     print(new_names[i]+full_names[i])
@@ -114,23 +115,23 @@ if __name__ == "__main__":
         elif(len(first_name)==len(second_name)):
             if(len(first_name)==3):
                 new_names.append(first_name)
-                # if((new_names[i]==full_names[i])==False):
-                #     print("2 ")
-                #     print(new_names[i]+full_names[i])
+                if((new_names[i]==full_names[i])==False):
+                    print("2  ")
+                    print(new_names[i]+full_names[i])
             elif(second_name[-1] in surnames):
                 first_name.append(second_name[-1])
                 new_names.append(first_name)
-                # if((new_names[i]==full_names[i])==False):
-                #     print("3  ")
-                #     print(new_names[i]+full_names[i])
+                if((new_names[i]==full_names[i])==False):
+                    print("3  ")
+                    print(new_names[i]+full_names[i])
                 # else:
                 #     print("3 true")
                 #     print(new_names[i]+full_names[i])
             else:
                 new_names.append(first_name)
-                # if ((new_names[i] == full_names[i]) == False):
-                #     print("4 ")
-                #     print(new_names[i] + full_names[i])
+                if ((new_names[i] == full_names[i]) == False):
+                    print("4  ")
+                    print(new_names[i] + full_names[i])
 
         elif(len(first_name)<len(second_name)):
             if(first_name[-1] in surnames and first_name[-1] not in female_list and first_name[-1] not in male_list):
@@ -140,6 +141,8 @@ if __name__ == "__main__":
                     print("5a")
                     print(new_names[i] + full_names[i])
             elif(second_name[-1] in surnames and first_name[-1] not in surnames):
+                    if(len(second_name)>3 and second_name[-2] in surnames):
+                        first_name.append(second_name[-2])
                     first_name.append(second_name[-1])
                     new_names.append(first_name)
                     if ((new_names[i] == full_names[i]) == False):
@@ -153,18 +156,23 @@ if __name__ == "__main__":
                 #         print("5b")
                 #         print(new_names[i] + full_names[i])
             else:
+                if (len(second_name) >= 3):
+                    if (second_name[-2] in surnames and second_name[-2] not in male_list and second_name[
+                        -2] not in female_list):
+                        first_name.append(second_name[-2])
                 first_name.append(second_name[-1])
+
                 new_names.append(first_name)
                 if ((new_names[i] == full_names[i]) == False):
                     # print(second_name)
-                    print("6 ")
+                    print("6  ")
                     print(second_name)
                     print(new_names[i] + full_names[i])
 
         else:
             new_names.append(first_name)
             if((new_names[i]==full_names[i])==False):
-                print("7 ")
+                print("7  ")
                 print(new_names[i]+full_names[i])
         i=i+1
     # print(new_names[:10])
@@ -193,6 +201,7 @@ if __name__ == "__main__":
         else:
             print(full_names[i])
 
+    print('accuracy')
     print(accuracy)
     print("two names")
     print(two_names)
