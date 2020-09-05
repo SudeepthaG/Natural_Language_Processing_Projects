@@ -33,7 +33,7 @@ if __name__ == "__main__":
     input_names,full_names,female_list,male_list,surnames=parseInput()
     female_list=female_list.tolist()
     male_list=male_list.tolist()
-    prefix=['MAJOR','COLONEL','REVEREND','DOCTOR','PROFESSOR']
+    prefix=['MAJOR','COLONEL','REVEREND','DOCTOR','PROFESSOR', 'MARSHALL']
     # female_list = [[j.replace(',', '') for j in i.split(' ')] for i in female_list]
     # male_list = [[j.replace(',', '') for j in i.split(' ')] for i in male_list]
     input_names= [[j.replace(',', '') for j in i.split(' AND ')] for i in input_names]
@@ -104,51 +104,67 @@ if __name__ == "__main__":
                         first_name.append(second_name[-2])
             first_name.append(second_name[-1])
             new_names.append(first_name)
-            if((new_names[i]==full_names[i])==False):
-                print("1  false")
-                print(new_names[i]+full_names[i])
+            # if((new_names[i]==full_names[i])==False):
+            #     print("1  false")
+            #     print(new_names[i]+full_names[i])
             # else:
             #     print('true')
             #     print(new_names[i]+full_names[i])
 
-
+        # elif(len(first_name)==len(second_name) and len(first_name)==2):
+        #     if(first_name[-1] in female_list or first_name[-1] in male_list):
+        #         first_name.append(second_name[-1])
+        #         new_names.append(first_name)
+        #         if((new_names[i]==full_names[i])==False):
+        #             print("2  ")
+        #             print(new_names[i]+full_names[i])
         elif(len(first_name)==len(second_name)):
+            current_prefix=''
+            if(first_name[0] in prefix):
+                current_prefix=first_name[0]
+                first_name.remove(current_prefix)
             if(len(first_name)==3):
                 new_names.append(first_name)
-                if((new_names[i]==full_names[i])==False):
-                    print("2  ")
-                    print(new_names[i]+full_names[i])
-            elif(second_name[-1] in surnames):
+                # if((new_names[i]==full_names[i])==False):
+                #     print("2  ")
+                #     print(new_names[i]+full_names[i])
+            elif(second_name[-1] in surnames and first_name[-1] in (female_list+male_list)):
                 first_name.append(second_name[-1])
+                if(len(current_prefix)!=0):
+                    first_name=[current_prefix]+first_name
+
                 new_names.append(first_name)
                 if((new_names[i]==full_names[i])==False):
                     print("3  ")
+                    print(second_name)
                     print(new_names[i]+full_names[i])
+                    print(np.where(surnames==new_names[i][-1]))
+                    print(np.where(surnames==full_names[i][-1]))
                 # else:
                 #     print("3 true")
                 #     print(new_names[i]+full_names[i])
             else:
                 new_names.append(first_name)
-                if ((new_names[i] == full_names[i]) == False):
-                    print("4  ")
-                    print(new_names[i] + full_names[i])
+                # if ((new_names[i] == full_names[i]) == False):
+                #     print("4  ")
+                #     print(new_names[i] + full_names[i])
 
         elif(len(first_name)<len(second_name)):
             if(first_name[-1] in surnames and first_name[-1] not in female_list and first_name[-1] not in male_list):
                 new_names.append(first_name)
-                print('sfdfd')
-                if ((new_names[i] == full_names[i]) == False):
-                    print("5a")
-                    print(new_names[i] + full_names[i])
+                # print('sfdfd')
+                # if ((new_names[i] == full_names[i]) == False):
+                #     print("5a")
+                #     print(new_names[i] + full_names[i])
             elif(second_name[-1] in surnames and first_name[-1] not in surnames):
                     if(len(second_name)>3 and second_name[-2] in surnames):
                         first_name.append(second_name[-2])
                     first_name.append(second_name[-1])
                     new_names.append(first_name)
-                    if ((new_names[i] == full_names[i]) == False):
-                        print("5b")
-                        print(second_name)
-                        print(new_names[i] + full_names[i])
+                    # if ((new_names[i] == full_names[i]) == False):
+                    #     print("5b")
+                    #     print(second_name)
+                    #     print(new_names[i] + full_names[i])
                 # else:
                 #     new_names.append(first_name)
                 #     print('dfxgfbd')
@@ -156,24 +172,42 @@ if __name__ == "__main__":
                 #         print("5b")
                 #         print(new_names[i] + full_names[i])
             else:
-                if (len(second_name) >= 3):
-                    if (second_name[-2] in surnames and second_name[-2] not in male_list and second_name[
-                        -2] not in female_list):
-                        first_name.append(second_name[-2])
-                first_name.append(second_name[-1])
 
-                new_names.append(first_name)
-                if ((new_names[i] == full_names[i]) == False):
+
+                    if (len(second_name) >= 3):
+                        if (second_name[-2] in surnames and second_name[-2] not in male_list and second_name[
+                            -2] not in female_list and first_name[-1] in (female_list+male_list)):
+                            first_name.append(second_name[-2])
+                            first_name.append(second_name[-1])
+                        elif (second_name[-1] in surnames and first_name[-1] in (female_list+male_list)):
+                            # if(np.where(surnames==second_name[-1])<np.where(surnames==first_name[-1]) and second_name[-1] not in (female_list+male_list)):
+                                first_name.append(second_name[-1])
+                        # if (len(first_name) == 3 and
+                        #         ((first_name[0] in female_list and first_name[1] in male_list and first_name[1] in surnames and first_name[1] not in female_list)
+                        #          or (first_name[0] in male_list and first_name[1] in female_list and first_name[1] in surnames  and first_name[1] not in female_list))):
+                        #     print(first_name[0] in female_list and first_name[1] in male_list and
+                        #                                first_name[1] in surnames)
+                        #     print( first_name[0] in male_list and first_name[
+                        #                                   1] in female_list and first_name[1] in surnames)
+                        #
+                        #     first_name.remove(second_name[-1])
+                        # else:
+                        #         print('aaa')
+
+                    new_names.append(first_name)
+                    if ((new_names[i] == full_names[i]) == False):
                     # print(second_name)
-                    print("6  ")
-                    print(second_name)
-                    print(new_names[i] + full_names[i])
+                        print("6  ")
+                        print(second_name)
+                        print(new_names[i] + full_names[i])
+                        print(np.where(surnames==new_names[i][-1]))
+                        print(np.where(surnames==full_names[i][-1]))
 
         else:
             new_names.append(first_name)
-            if((new_names[i]==full_names[i])==False):
-                print("7  ")
-                print(new_names[i]+full_names[i])
+            # if((new_names[i]==full_names[i])==False):
+            #     print("7  ")
+            #     print(new_names[i]+full_names[i])
         i=i+1
     # print(new_names[:10])
 
