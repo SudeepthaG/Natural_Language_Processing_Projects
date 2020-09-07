@@ -69,7 +69,9 @@ if __name__ == "__main__":
                             first_name.append(second_name[-2])
                             first_name.append(second_name[-1])
                         elif (second_name[-1] in surnames and first_name[-1] in (female_list+male_list)):
-                                first_name.append(second_name[-1])
+                            if (second_name[-2] in surnames and len(second_name) >= 4 and second_name[0] not in prefix):
+                                first_name.append(second_name[-2])
+                            first_name.append(second_name[-1])
                     new_names.append(first_name)
 
         else:
