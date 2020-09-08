@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 def parseInput(file_name):
-    # Reading input data and other data files
+    # Reading input data and other data files from path specified in command line
     input_names = np.genfromtxt(file_name,delimiter=',',usecols=0,dtype=str)
     data_input = np.genfromtxt(file_name,delimiter=',',usecols=0,dtype=str)
     female_list=np.genfromtxt('dist.female.first.txt',usecols=0,dtype=str)
@@ -9,7 +9,10 @@ def parseInput(file_name):
     surnames = np.genfromtxt('Names_2010Census.csv', delimiter=',',usecols=0,dtype=str)
     return data_input,input_names,female_list,male_list,surnames
 
+
 if __name__ == "__main__":
+
+    # Initializing input data
     file_name=str(sys.argv[-1])
     data_input,input_names,female_list,male_list,surnames=parseInput(file_name)
     female_list=female_list.tolist()
@@ -79,6 +82,7 @@ if __name__ == "__main__":
         i=i+1
 
 
+    #Converting predicted names to strings
     name_strs = []
     for i in range(len(new_names)):
         str1 = " "
@@ -86,6 +90,7 @@ if __name__ == "__main__":
         name_strs.append(str1)
 
 
+    # Writing input names and predicted names to output file
     import csv
     with open('full-name-output.csv', 'w') as f:
         writer = csv.writer(f)
