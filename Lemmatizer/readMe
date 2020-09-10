@@ -1,0 +1,1 @@
+In thir project , I'm developing a lemmatizer, which learns a lemmatization function from an annotated corpus. The lemmatizer can work on any language if the annotated corpus is given.
