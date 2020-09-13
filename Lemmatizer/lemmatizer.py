@@ -46,7 +46,8 @@ train_data = open(train_file, 'r')
 
 token_count=0
 tokens={}
-ambi=0
+
+identity_tokens=0
 for line in train_data:
 
     # Tab character identifies lines containing tokens
@@ -59,14 +60,17 @@ for line in train_data:
         lemma = field[2]
         # print(form+" "+lemma )
         token_count=token_count+1
-        if form in tokens.keys() and form!='|':
-            ambi=ambi+1
+        if form in tokens and lemma not in tokens[form]:
 
-        tokens[lemma]=[form]
+            tokens[form].append(lemma)
+        if form not in tokens:
+            tokens[form]=[lemma]
+        if form==lemma:
+            identity_tokens=identity_tokens+1
 
 print("Wordform tokens: "+str(token_count))
 print(len(tokens))
-print(ambi)
+print(identity_tokens)
 
 
 #         ######################################################
@@ -95,6 +99,7 @@ for line in train_data:
                 lemma_count[form][lemma]=1
                 if len(lemma_count[form].keys())==2:     #form is ambigious if it has more than 2 lemmas
                     ambi_types = ambi_types + 1
+
         else:
             lemma_count[form]={lemma:1}
 
@@ -104,35 +109,45 @@ print("Ambiguous types: "+str(ambi_types))
 print("Unambiguous types: "+str(len(lemma_count)-ambi_types))
 
 
+
 # ######################################################
 # ### Insert code for building the lookup table      ###
 # ######################################################
 
 # mapping to the most common lemma:
 lemma_max={}
+ambi_tokens=0
+# unambiguous_type=0
+ambi_common_tokens=0
 for form in lemma_count.keys():
     if len(lemma_count[form].keys()) >= 2:     #for ambiguos forms, choose most common lemma
         highest=0
         common_lemma=''
+
         for lemma in lemma_count[form]:
+            ambi_tokens = ambi_tokens + lemma_count[form][lemma]
             if highest<lemma_count[form][lemma]:
                 highest=lemma_count[form][lemma]
                 common_lemma=lemma
+        ambi_common_tokens = ambi_common_tokens+highest
         lemma_max[form]=common_lemma
     else:
+        # unambiguous_type=unambiguous_type+1
         for lemma in lemma_count[form]:
             lemma_max[form]=lemma
 
-
+print('ambi_tokens:')
+print(ambi_tokens)
 print(len(lemma_max))
+
 # print(lemma_max)
 
-identity_tokens=0
-for form in lemma_max.keys():
-    if form==lemma_max[form]:
-        identity_tokens=identity_tokens+1
-
-print("Identity types: "+str(identity_tokens))
+# identity_types=0
+# for form in lemma_max.keys():
+#     if form==lemma_max[form]:
+#         identity_types=identity_types+1
+#
+# print("Identity types: "+str(identity_types))
 
 form=''
 lemma=''
@@ -140,6 +155,16 @@ lemma=''
 # ######################################################
 # ### Insert code for populating the training counts ###
 # ######################################################
+
+
+training_counts ['Wordform types']=len(lemma_count)
+training_counts ['Wordform tokens']= token_count
+training_counts [ 'Unambiguous types'] = len(lemma_count)-ambi_types
+training_counts ['Unambiguous tokens'] = token_count-ambi_tokens
+training_counts ['Ambiguous types'] = ambi_types
+training_counts ['Ambiguous tokens'] = ambi_tokens
+training_counts ['Ambiguous most common tokens'] = ambi_common_tokens
+training_counts ['Identity tokens'] = identity_tokens
 
 ### Calculate expected accuracy if we used lookup on all items ###
 lookup_accuracy=0
@@ -158,7 +183,7 @@ for line in train_data:
 
 print("Expected lookup accuracy: "+str(lookup_accuracy/token_count))
 #
-accuracies['Expected lookup'] =  str(lookup_accuracy/token_count)
+accuracies['Expected lookup'] =  lookup_accuracy/token_count
 
 ### Calculate expected accuracy if we used identity mapping on all items ###
 
@@ -177,7 +202,7 @@ for line in train_data:
 
 print("Expected identity accuracy: "+str(identity_accuracy/token_count))
 
-accuracies['Expected identity'] =  str(identity_accuracy/token_count)
+accuracies['Expected identity'] =  identity_accuracy/token_count
 
 
 ### Testing: read test data, and compare lemmatizer output to actual lemma
@@ -221,6 +246,16 @@ print(lookup_mismatch)
 print(identity_match)
 print(identity_mismatch)
 
+test_counts['Total test items'] = test_items_count
+test_counts[ 'Found in lookup table'] = lookup_availability
+test_counts['Lookup match'] =lookup_match
+test_counts[ 'Lookup mismatch'] = lookup_mismatch
+test_counts['Not found in lookup table'] = test_items_count- lookup_availability
+test_counts['Identity match'] = identity_match
+test_counts['Identity mismatch'] = identity_mismatch
+
+
+
 # calculating accuracies
 test_lookup_accuracy=lookup_match/lookup_availability
 test_identity_accuracy=identity_match/(identity_match+identity_mismatch)
@@ -241,6 +276,10 @@ accuracies['Overall'] =  overall_accuracy
 
 ### Report training statistics and test results
 
+print(training_counts)
+print(accuracies)
+print(test_counts)
+
 output = open('lookup-output.txt', 'w')
 
 output.write('Training statistics\n')
@@ -259,4 +298,4 @@ for outcome in test_outcomes:
 for model in ['Lookup', 'Identity', 'Overall']:
     output.write(model + ' accuracy: ' + str(accuracies[model]) + '\n')
 
-output.close
+output.close()
