@@ -1,1 +1,13 @@
-In thir project , I'm developing a lemmatizer, which learns a lemmatization function from an annotated corpus. The lemmatizer can work on any language if the annotated corpus is given.
+This program is a lemmatizer, which learns a lemmatization function from an annotated corpus. The function maps every word form
+attested in the training data to the most common lemma associated with that form. At test time, the program checks if a form is in
+the lookup table, and if so, it gives the associated lemma; if the form is not in the lookup table, it gives the form itself as the
+lemma (identity mapping).
+
+The program performs training and testing in one run: it reads the training data, learns the lookup table and keeps it in memory,
+then reads the test data, runs the testing, and reports the results.
+
+Training and test files: Both files are assumed to be already tokenized, in Universal Dependencies format, that is: each token on a
+separate line, each line consisting of fields separated by tab characters, with word form in the second field, and lemma in the third 
+field. Tab characters are assumed to occur only in lines corresponding to tokens; other lines are ignored.
+
+This lemmatizer is expected to work on an annotated corpus in any language.
