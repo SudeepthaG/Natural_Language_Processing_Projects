@@ -3,6 +3,6 @@ The reviews are classified as:
 -truthful or deceptive, and
 -positive or negative
 
-The project has been implemented using two algorithms:
+The project has been implemented using two classification algorithms:
 -Naive Bayes
 -Perceptron Classifiers(vanilla and averaged)
