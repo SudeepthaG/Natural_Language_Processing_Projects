@@ -1,0 +1,8 @@
+This project contains a hotel reviews classifier.
+The reviews are classified as:
+-truthful or deceptive, and
+-positive or negative
+
+The project has been implemented using two algorithms:
+-Naive Bayes
+-Perceptron Classifiers(vanilla and averaged)
