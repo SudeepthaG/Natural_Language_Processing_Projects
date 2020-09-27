@@ -22,7 +22,7 @@ for f in all_files:
         else:
             file_type.append("pd")
             paths.append(f)
-    else:
+    elif "negative" in class1:
         if "truthful" in class2:
             file_type.append("nt")
             paths.append(f)
@@ -42,23 +42,28 @@ for i in range(len(paths)):
         if filedata[j] in punctuation_list:
             filedata = filedata[:j] + ' ' + filedata[j + 1:]
     filedata = filedata.replace("\n", '')
-
-    words = filedata.split()
     class_results = {}
-    for key, value in class_word_prob.items():
-        probablity = 0
-        for word in words:
-            val = class_word_prob.get(key).get(word, None)
-            if val != None:
+    for key in class_word_prob.keys():
+        value = class_word_prob[key]
+        prob = 0
+        for word in filedata.split():
+            val_file_type = class_word_prob[key]
+            if word in val_file_type:
+                val = val_file_type[word]
+            else:
+                val_file_type[word] = "no val found"
+                val = val_file_type[word]
+            if val != "no val found":
                 val = math.log(val)
-                probablity += val
+                prob += val
             else:
                 pass
-        class_results[key] = probablity * 1 / 4
+        class_results[key] = prob * 0.25
     # print(class_results)
-    max = float('-inf')
+    max = -10000.00
     class_res = 0
-    for key, value in class_results.items():
+    for key in class_results.keys():
+        value = class_results[key]
         if value > max:
             max = value
             class_res = key
@@ -67,26 +72,27 @@ for i in range(len(paths)):
     #    print(filename + str(class_res))
     final_type = class_res
     if final_type == "pt":
-        outfile.write("truthful positive " + paths[i])
-    if final_type == "pd":
-        outfile.write("deceptive positive " + paths[i])
-    if final_type == "nt":
-        outfile.write("truthful negative " + paths[i])
-    if final_type == "nd":
-        outfile.write("deceptive negative " + paths[i])
+        outfile.write("truthful positive " + paths[i] + "\n")
+    elif final_type == "pd":
+        outfile.write("deceptive positive " + paths[i] + "\n")
+    elif final_type == "nt":
+        outfile.write("truthful negative " + paths[i] + "\n")
+    elif final_type == "nd":
+        outfile.write("deceptive negative " + paths[i] + "\n")
     else:
         pass
-    outfile.write("\n")
     current_file_type = file_type[i]
     if current_file_type in result:
-        resMap = result[current_file_type]
+        resultDict = result[current_file_type]
     else:
-        resMap = result.get(current_file_type, {})
-    if final_type in resMap:
-        currTotal = resMap[final_type] + 1
-        resMap[final_type] = currTotal
+        result[current_file_type] = {}
+        resultDict = result[current_file_type]
+    if final_type in resultDict:
+        newSum = resultDict[final_type] + 1
+        resultDict[final_type] = newSum
     else:
-        currTotal = resMap.get(final_type, 0)
-        resMap[final_type] = currTotal + 1
-    result[file_type[i]] = resMap
+        resultDict[final_type] = 0
+        newSum = resultDict[final_type]
+        resultDict[final_type] = newSum + 1
+    result[file_type[i]] = resultDict
 outfile.close()
