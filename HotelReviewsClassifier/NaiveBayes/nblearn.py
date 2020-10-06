@@ -7,7 +7,7 @@ import math
 
 filelist= []
 # path=sys.argv[1]
-path="./op_spam_training_data"
+path= "./op_spam_training_data"
 
 
 # analysing input
@@ -63,7 +63,7 @@ paths=[]
 class_name=[]
 
 # all_files = glob.glob(os.path.join(sys.argv[1], '*/*/*/*.txt'))
-all_files = glob.glob(os.path.join("./op_spam_training_data", '*/*/*/*.txt'))
+all_files = glob.glob(os.path.join("../PerceptronClassifier/op_spam_training_data", '*/*/*/*.txt'))
 
 for f in all_files:
       #print(f)
