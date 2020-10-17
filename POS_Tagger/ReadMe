@@ -1,0 +1,2 @@
+ This project helpts to predict the parts of speech of a surprise language after being trained on tagged data in Italian and Japanese languages. 
+ It uses a Hidden Markov Model part-of-speech tagger for training and predicting.
