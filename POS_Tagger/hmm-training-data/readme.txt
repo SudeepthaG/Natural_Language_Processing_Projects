@@ -1,4 +1,3 @@
-README for the part-of-speech tagging corpus used in Coding Assignment 4, USC course CSCI-544 (Applied Natural Language Processing), Spring 2020.
 
 The corpus has been adapted from the Italian (ISDT) and Japanese (GSD) sections of the universal dependencies corpus. The source corpora, documentation, and credits can be found at http://universaldependencies.org
 
