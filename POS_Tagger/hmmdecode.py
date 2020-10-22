@@ -15,7 +15,7 @@ for line in f.readlines():
     words = line.split()
     tags_dict = inputdata[1]
     words_tags_dict = inputdata[2]
-    res = {}  # 3d - matrix to store the data..
+    res = {}
     wordscount = len(words)+1
     tagged_sent = ""
     for i in range(0, wordscount):
