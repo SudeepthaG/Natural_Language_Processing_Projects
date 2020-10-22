@@ -2,5 +2,5 @@
  It uses a Hidden Markov Model part-of-speech tagger for training and predicting.
  
 Accuracy achieved:
-Italian: 93%
-Japanese: 90%
+Italian: 93.18%
+Japanese: 90.9%
